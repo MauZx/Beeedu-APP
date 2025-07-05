@@ -129,8 +129,8 @@ export default function ProgressPage() {
               <span style={{ fontSize: 36, fontWeight: 700, color: 'var(--azul-beeedu-light)', minWidth: 80, textAlign: 'center' }}>{currentLevel + 1}</span>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 8 }}>
-              <span style={{ color: 'var(--azul-beeedu-light)', fontWeight: 600, fontSize: 18 }}>Rank Atual</span>
-              <span style={{ color: 'var(--azul-beeedu-light)', fontWeight: 600, fontSize: 18 }}>faltam {Math.abs(pointsForNext - userProgress.currentPoints).toLocaleString()} XP para o próximo nível!</span>
+              <span style={{ color: 'var(--azul-beeedu-light)', fontWeight: 600, fontSize: 18 }}>Level Atual</span>
+              <span style={{ color: 'var(--azul-beeedu-light)', fontWeight: 600, fontSize: 18 }}>faltam {Math.abs(pointsForNext - userProgress.currentPoints).toLocaleString()} XP para o próximo level!</span>
             </div>
           </div>
 
