@@ -1,4 +1,4 @@
-# 🐝 Beeedu APP
+# 🐝 Beeedu Platform
 
 Uma plataforma educacional inovadora que conecta estudantes de escolas públicas ao mercado de trabalho através de cursos, freelas, gamificação e Drafts de Vagas.
 
@@ -67,6 +67,48 @@ O Beeedu é um ecossistema educacional que transforma a educação em oportunida
 4. **Acesse a aplicação**
    Abra [http://localhost:3000](http://localhost:3000) no seu navegador
 
+## 🌐 Deploy no Netlify
+
+### Método 1: Deploy via Git (Recomendado)
+
+1. **Faça push do código para o GitHub**
+   ```bash
+   git add .
+   git commit -m "Deploy para Netlify"
+   git push origin main
+   ```
+
+2. **Acesse o Netlify**
+   - Vá para [netlify.com](https://netlify.com)
+   - Faça login ou crie uma conta
+
+3. **Conecte com GitHub**
+   - Clique em "New site from Git"
+   - Escolha GitHub
+   - Selecione seu repositório
+
+4. **Configure o build**
+   - **Build command:** `npm run build`
+   - **Publish directory:** `build`
+   - Clique em "Deploy site"
+
+### Método 2: Deploy Manual
+
+1. **Faça o build local**
+   ```bash
+   npm run build
+   ```
+
+2. **Faça upload da pasta `build`**
+   - Acesse [netlify.com](https://netlify.com)
+   - Arraste a pasta `build` para a área de deploy
+
+### Configurações do Netlify
+
+O projeto já inclui:
+- `netlify.toml` - Configurações de build
+- `public/_redirects` - Configuração de rotas para SPA
+
 ## 🎯 Como Usar
 
 ### Primeiro Acesso
@@ -92,18 +134,21 @@ Para testar rapidamente, use as credenciais:
 ```
 beeedu-plataform/
 ├── public/
+│   ├── _redirects
 │   ├── beeedu-coin.svg
 │   ├── beeedu-logo.svg
 │   └── index.html
 ├── src/
 │   ├── components/
 │   │   ├── BannerRotativo.js
+│   │   ├── DraftsReceivedPage.js
 │   │   ├── EnrolledCourses.js
 │   │   ├── Footer.js
 │   │   ├── Header.js
 │   │   ├── Homepage.js
 │   │   ├── LogoCarousel.js
 │   │   ├── ProgressPage.js
+│   │   ├── ProjectsInProgressPage.js
 │   │   ├── StudentDashboard.js
 │   │   ├── StudentLoginForm.js
 │   │   ├── StudentRegistrationForm.js
@@ -113,6 +158,7 @@ beeedu-plataform/
 │   ├── AuthContext.js
 │   ├── index.js
 │   └── index.css
+├── netlify.toml
 ├── package.json
 └── README.md
 ```
