@@ -1,4 +1,4 @@
-# 🐝 Beeedu Platform
+# 🐝 Beeedu APP
 
 Uma plataforma educacional inovadora que conecta estudantes de escolas públicas ao mercado de trabalho através de cursos, freelas, gamificação e Drafts de Vagas.
 
