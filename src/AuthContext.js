@@ -6,12 +6,12 @@ const AuthContext = createContext();
 const FAKE_USERS = [
   {
     id: 1,
-    username: 'nicolas',
-    email: 'nicolas@email.com',
+    username: 'admin',
+    email: 'admin@email.com',
     phone: '11999999999',
     cpf: '12345678909',
     password: 'Senha@123',
-    name: 'Nicolas',
+    name: 'Admin',
     avatar: '',
     contas: ['Aluno', 'Professor', 'Empresa'], // tipos de conta vinculados
     tipoConta: 'Aluno', // tipo de conta atual
