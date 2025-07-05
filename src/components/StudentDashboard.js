@@ -68,10 +68,10 @@ export default function StudentDashboard() {
           </div>
           <button className="notif-btn" aria-label="Notificações">🔔</button>
           <img src={user?.avatar || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(user?.name || 'Aluno')} alt="Perfil" className="profile-pic" />
-          <div className="level-badge">
+          <Link to="/progresso" className="level-badge" style={{ textDecoration: 'none' }}>
             <span className="level">Lv. 12</span>
             <span className="badge">🏅</span>
-          </div>
+          </Link>
           <div className="profile-dropdown" ref={menuRef}>
             <button className="profile-menu-btn" onClick={() => setMenuOpen((v) => !v)} aria-expanded={menuOpen}>▼</button>
             {menuOpen && (
