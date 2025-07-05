@@ -1,0 +1,57 @@
+:root {
+  --beeedu-blue: #6699FF;
+  --deep-blue: #2F4A60;
+  --white: #FFFFFF;
+  --light-gray: #F2F4F7;
+  --dark-gray: #4B5563;
+  --success-green: #22C55E;
+  --error-red: #EF4444;
+  --warning-yellow: #FACC15;
+  --radius-2xl: 20px;
+  --shadow-soft: 0 4px 24px rgba(47,74,96,0.08);
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', 'Nunito', 'Open Sans', Arial, sans-serif;
+  background: var(--white);
+  color: var(--deep-blue);
+}
+
+.App {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  color: var(--deep-blue);
+  margin-top: 0;
+}
+
+button {
+  font-family: inherit;
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-soft);
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+a {
+  color: var(--beeedu-blue);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+input, select, textarea {
+  font-family: inherit;
+  border-radius: var(--radius-2xl);
+  border: 1px solid var(--light-gray);
+  padding: 8px 12px;
+  outline: none;
+} 
