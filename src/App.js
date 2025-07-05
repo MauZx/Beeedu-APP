@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import EnrolledCourses from './components/EnrolledCourses';
 import UXDesignCoursePage from './components/UXDesignCoursePage';
 import ProgressPage from './components/ProgressPage';
+import DraftsReceivedPage from './components/DraftsReceivedPage';
 import './App.css';
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
           <Route path="/cadastro" element={<StudentRegistrationForm />} />
           <Route path="/curso/ux-design" element={<UXDesignCoursePage />} />
           <Route path="/progresso" element={<ProgressPage />} />
+          <Route path="/drafts" element={<DraftsReceivedPage />} />
         </Routes>
       </Router>
     </div>
