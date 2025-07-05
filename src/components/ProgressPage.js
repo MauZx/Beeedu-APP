@@ -3,10 +3,11 @@ import { Link } from 'react-router-dom';
 import './StudentDashboard.css';
 
 // Estrutura dos níveis e insígnias
-const LEVELS = Array.from({ length: 100 }, (_, i) => {
-  const level = i + 1;
-  const points = Math.round(100 * Math.pow(1.5, i));
-  return { level, points };
+const LEVELS = Array.from({ length: 101 }, (_, i) => {
+  // Nível 0 começa com 0 pontos, precisa de 100 para o nível 1
+  if (i === 0) return { level: 0, points: 0 };
+  const points = Math.round(100 * Math.pow(1.5, i - 1));
+  return { level: i, points };
 });
 
 const BADGES = [
@@ -48,7 +49,7 @@ function getBadgeForLevel(level) {
 }
 
 function getLevelByPoints(points) {
-  let level = 1;
+  let level = 0;
   for (let i = 0; i < LEVELS.length; i++) {
     if (points >= LEVELS[i].points) {
       level = LEVELS[i].level;
@@ -62,8 +63,8 @@ function getLevelByPoints(points) {
 export default function ProgressPage() {
   // Calcular nível a partir dos pontos
   const currentLevel = getLevelByPoints(userProgress.currentPoints);
-  const currentLevelObj = LEVELS[currentLevel - 1];
-  const nextLevelObj = LEVELS[currentLevel] || LEVELS[LEVELS.length - 1];
+  const currentLevelObj = LEVELS[currentLevel];
+  const nextLevelObj = LEVELS[currentLevel + 1] || LEVELS[LEVELS.length - 1];
   const pointsForCurrent = currentLevelObj ? currentLevelObj.points : 0;
   const pointsForNext = nextLevelObj ? nextLevelObj.points : pointsForCurrent;
   const progressPercent = Math.min(100, ((userProgress.currentPoints - pointsForCurrent) / (pointsForNext - pointsForCurrent)) * 100);
