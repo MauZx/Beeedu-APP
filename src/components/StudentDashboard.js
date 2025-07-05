@@ -156,13 +156,13 @@ export default function StudentDashboard() {
       {/* Footer */}
       <footer className="dashboard-footer">
         <div className="footer-col">
-          <h4>Sobre</h4>
+          <h4 style={{color:"#6699FF"}}>Sobre</h4>
           <a href="#">Quem Somos</a>
           <a href="#">Missão</a>
           <a href="#">Contato</a>
         </div>
         <div className="footer-col">
-          <h4>Comunidade</h4>
+          <h4 style={{color:"#6699FF"}}>Comunidade</h4>
           <a href="#">Escolas</a>
           <a href="#">Faculdades</a>
           <a href="#">Empresas</a>
@@ -170,7 +170,7 @@ export default function StudentDashboard() {
           <a href="#">Podcast</a>
         </div>
         <div className="footer-col">
-          <h4>Mais</h4>
+          <h4 style={{color:"#6699FF"}}>Mais</h4>
           <a href="#">Imprensa</a>
           <a href="#">Investidores</a>
           <a href="#">Termos</a>
