@@ -3,6 +3,7 @@ import './StudentDashboard.css';
 import { useAuth } from '../AuthContext';
 import BannerRotativo from './BannerRotativo';
 import LogoCarousel from './LogoCarousel';
+import { Link } from 'react-router-dom';
 
 export default function StudentDashboard() {
   const { user, logout, switchAccount } = useAuth();
@@ -55,9 +56,10 @@ export default function StudentDashboard() {
           </div>
         </div>
         <nav className="header-menu">
-          <a href="#" className="active">INÍCIO</a>
-          <a href="#">CURSOS</a>
-          <a href="#">FEED</a>
+          <Link to="/" className="active">INÍCIO</Link>
+          <Link to="/matriculados">CURSOS MATRICULADOS</Link>
+          <Link to="#">CURSOS</Link>
+          <Link to="#">FEED</Link>
         </nav>
         <div className="header-right">
           <div className="beeedu-coin">
@@ -135,7 +137,7 @@ export default function StudentDashboard() {
           <h3>Atividades em andamento</h3>
           <div className="activities-grid">
             <div className="activity-card">Drafts Recebidos</div>
-            <div className="activity-card">Cursos Matriculados</div>
+            <Link to="/matriculados" className="activity-card" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Cursos Matriculados</Link>
             <div className="activity-card">Freelas em Curso</div>
             <div className="activity-card">Projetos em Andamento</div>
           </div>

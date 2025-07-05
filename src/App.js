@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import Homepage from './components/Homepage';
 import StudentDashboard from './components/StudentDashboard';
 import StudentRegistrationForm from './components/StudentRegistrationForm';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import EnrolledCourses from './components/EnrolledCourses';
 import './App.css';
 
 function App() {
@@ -15,16 +17,14 @@ function App() {
 
   return (
     <div className="App">
-      {loggedIn ? (
-        <StudentDashboard onLogout={() => setLoggedIn(false)} />
-      ) : showRegistration ? (
-        <div>
-          <button onClick={handleCloseRegistration} style={{ margin: 16 }}>&larr; Voltar</button>
-          <StudentRegistrationForm />
-        </div>
-      ) : (
-        <Homepage onStudentRegister={handleOpenStudentRegistration} />
-      )}
+      <Router>
+        <Routes>
+          <Route path="/" element={<Homepage onStudentRegister={handleOpenStudentRegistration} />} />
+          <Route path="/dashboard" element={<StudentDashboard onLogout={() => setLoggedIn(false)} />} />
+          <Route path="/matriculados" element={<EnrolledCourses />} />
+          <Route path="/cadastro" element={<StudentRegistrationForm />} />
+        </Routes>
+      </Router>
     </div>
   );
 }
