@@ -7,10 +7,10 @@ function Header() {
       <div className="header-left">
         <span className="logo" aria-label="Beeedu Logo">
           {/* Placeholder SVG logo */}
-          <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+          <svg width="1000" height="36" viewBox="0 0 36 36" fill="none" style={{ objectFit: 'cover' }}>
             <circle cx="18" cy="18" r="18" fill="#6699FF" />
-            <text x="50%" y="55%" textAnchor="middle" fill="#fff" fontSize="16" fontWeight="bold" dy=".3em">B</text>
           </svg>
+          <span style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', color: '#fff', fontSize: '16px', fontWeight: 'bold' }}>BEEEDU</span>
         </span>
         <div className="header-social">
           {/* Placeholder social icons */}
