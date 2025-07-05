@@ -36,7 +36,7 @@ const BADGES = [
 
 // Exemplo de progresso do usuário
 const userProgress = {
-  currentPoints: 4200,
+  currentPoints: 1200, // Valor de teste final
   unlockedBadges: BADGES.filter(b => b.level <= 17),
 };
 
@@ -107,7 +107,7 @@ export default function ProgressPage() {
           <button className="notif-btn" aria-label="Notificações">🔔</button>
           <img src="https://ui-avatars.com/api/?name=Aluno" alt="Perfil" className="profile-pic" />
           <Link to="/progresso" className="level-badge" style={{ textDecoration: 'none' }}>
-            <span className="level">Lv. 12</span>
+            <span className="level">Lv. {currentLevel}</span>
             <span className="badge">🏅</span>
           </Link>
         </div>
