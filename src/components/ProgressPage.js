@@ -35,7 +35,6 @@ const BADGES = [
 
 // Exemplo de progresso do usuário
 const userProgress = {
-  currentLevel: 5,
   currentPoints: 4200,
   unlockedBadges: BADGES.filter(b => b.level <= 17),
 };
@@ -48,14 +47,27 @@ function getBadgeForLevel(level) {
   return badge;
 }
 
+function getLevelByPoints(points) {
+  let level = 1;
+  for (let i = 0; i < LEVELS.length; i++) {
+    if (points >= LEVELS[i].points) {
+      level = LEVELS[i].level;
+    } else {
+      break;
+    }
+  }
+  return level;
+}
+
 export default function ProgressPage() {
-  // Calcular progresso total e para o próximo nível
-  const currentLevelObj = LEVELS[userProgress.currentLevel - 1];
-  const nextLevelObj = LEVELS[userProgress.currentLevel] || LEVELS[LEVELS.length - 1];
+  // Calcular nível a partir dos pontos
+  const currentLevel = getLevelByPoints(userProgress.currentPoints);
+  const currentLevelObj = LEVELS[currentLevel - 1];
+  const nextLevelObj = LEVELS[currentLevel] || LEVELS[LEVELS.length - 1];
   const pointsForCurrent = currentLevelObj ? currentLevelObj.points : 0;
   const pointsForNext = nextLevelObj ? nextLevelObj.points : pointsForCurrent;
   const progressPercent = Math.min(100, ((userProgress.currentPoints - pointsForCurrent) / (pointsForNext - pointsForCurrent)) * 100);
-  const currentBadge = getBadgeForLevel(userProgress.currentLevel);
+  const currentBadge = getBadgeForLevel(currentLevel);
 
   return (
     <div className="student-dashboard">
@@ -104,7 +116,7 @@ export default function ProgressPage() {
           {/* Barra de progresso inspirada na imagem */}
           <div style={{ background: 'var(--azul-beeedu)', borderRadius: 16, padding: 32, boxShadow: 'var(--shadow-card)', marginBottom: 40 }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-              <span style={{ fontSize: 36, fontWeight: 700, color: 'var(--azul-beeedu-light)', minWidth: 80, textAlign: 'center' }}>{userProgress.currentLevel}</span>
+              <span style={{ fontSize: 36, fontWeight: 700, color: 'var(--azul-beeedu-light)', minWidth: 80, textAlign: 'center' }}>{currentLevel}</span>
               <div style={{ flex: 1, margin: '0 24px', position: 'relative' }}>
                 <div style={{ height: 28, background: 'var(--cinza-card)', borderRadius: 14, overflow: 'hidden', position: 'relative', boxShadow: '0 0 8px var(--azul-beeedu-light)' }}>
                   <div style={{ height: '100%', width: `${progressPercent}%`, background: 'linear-gradient(90deg, var(--azul-beeedu-light) 60%, var(--azul-beeedu) 100%)', boxShadow: '0 0 16px var(--azul-beeedu-light)', transition: 'width 0.7s cubic-bezier(.4,2,.6,1)' }}></div>
@@ -113,7 +125,7 @@ export default function ProgressPage() {
                   +{userProgress.currentPoints - pointsForCurrent} XP
                 </div>
               </div>
-              <span style={{ fontSize: 36, fontWeight: 700, color: 'var(--azul-beeedu-light)', minWidth: 80, textAlign: 'center' }}>{userProgress.currentLevel + 1}</span>
+              <span style={{ fontSize: 36, fontWeight: 700, color: 'var(--azul-beeedu-light)', minWidth: 80, textAlign: 'center' }}>{currentLevel + 1}</span>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 8 }}>
               <span style={{ color: 'var(--azul-beeedu-light)', fontWeight: 600, fontSize: 18 }}>Rank Atual</span>
