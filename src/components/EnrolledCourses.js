@@ -1,5 +1,6 @@
 import React from 'react';
 import './StudentDashboard.css';
+import { Link } from 'react-router-dom';
 
 export default function EnrolledCourses() {
   return (
@@ -29,7 +30,7 @@ export default function EnrolledCourses() {
                   <h4 style={{ fontWeight: 700, fontSize: 20, margin: '8px 0 12px' }}>UX Design</h4>
                   <span style={{ color: '#43b324', fontWeight: 500, fontSize: 14, marginBottom: 8 }}>Gratuito</span>
                   <span style={{ color: '#888', fontSize: 15, marginBottom: 12 }}>Curso completo de UX Design com vídeos selecionados.</span>
-                  <a href="https://www.youtube.com/watch?v=ugPM7j9AmFQ&list=PLwgL9IEA0PxXwYSLBFSEuxZigG07_iet-" target="_blank" rel="noopener noreferrer" style={{ marginTop: 'auto', background: '#6699FF', color: '#fff', padding: '10px 0', borderRadius: 8, textAlign: 'center', fontWeight: 700, textDecoration: 'none', fontSize: 16 }}>Acessar Curso</a>
+                  <Link to="/curso/ux-design" style={{ marginTop: 'auto', background: '#6699FF', color: '#fff', padding: '10px 0', borderRadius: 8, textAlign: 'center', fontWeight: 700, textDecoration: 'none', fontSize: 16, display: 'block' }}>Acessar Curso</Link>
                 </div>
               </div>
             </div>

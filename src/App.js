@@ -4,6 +4,8 @@ import StudentDashboard from './components/StudentDashboard';
 import StudentRegistrationForm from './components/StudentRegistrationForm';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import EnrolledCourses from './components/EnrolledCourses';
+import UXDesignCoursePage from './components/UXDesignCoursePage';
+import ProgressPage from './components/ProgressPage';
 import './App.css';
 
 function App() {
@@ -23,6 +25,8 @@ function App() {
           <Route path="/dashboard" element={<StudentDashboard onLogout={() => setLoggedIn(false)} />} />
           <Route path="/matriculados" element={<EnrolledCourses />} />
           <Route path="/cadastro" element={<StudentRegistrationForm />} />
+          <Route path="/curso/ux-design" element={<UXDesignCoursePage />} />
+          <Route path="/progresso" element={<ProgressPage />} />
         </Routes>
       </Router>
     </div>
