@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
 import './StudentDashboard.css';
@@ -81,24 +81,165 @@ function getStatusText(status) {
   }
 }
 
+function StatsCard({ value, label }) {
+  return (
+    <div style={{ background: 'var(--azul-beeedu)', borderRadius: 12, padding: 20, flex: 1, minWidth: 150, textAlign: 'center' }}>
+      <div style={{ fontSize: 24, fontWeight: 700, color: '#fff' }}>{value}</div>
+      <div style={{ fontSize: 14, color: '#fff', opacity: 0.9 }}>{label}</div>
+    </div>
+  );
+}
+
+function DraftCard({ draft }) {
+  return (
+    <div style={{ 
+      background: '#fff', 
+      borderRadius: 12, 
+      padding: 24, 
+      boxShadow: 'var(--shadow-card)',
+      border: '1px solid var(--cinza-card)'
+    }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 16 }}>
+        <div style={{ flex: 1 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
+            <h3 style={{ fontSize: 20, fontWeight: 600, color: 'var(--deep-blue)', margin: 0 }}>
+              {draft.cargo}
+            </h3>
+            <span style={{
+              padding: '4px 12px',
+              borderRadius: 20,
+              fontSize: 12,
+              fontWeight: 600,
+              color: '#fff',
+              background: getStatusColor(draft.status)
+            }}>
+              {getStatusText(draft.status)}
+            </span>
+          </div>
+          <div style={{ fontSize: 16, fontWeight: 500, color: 'var(--azul-beeedu)', marginBottom: 4 }}>
+            {draft.empresa}
+          </div>
+          <div style={{ fontSize: 14, color: 'var(--text-secondary)', marginBottom: 8 }}>
+            📍 {draft.localizacao} • 💰 {draft.salario} • 📋 {draft.tipo}
+          </div>
+          <div style={{ fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+            {draft.descricao}
+          </div>
+        </div>
+        <div style={{ textAlign: 'right', marginLeft: 16 }}>
+          <div style={{ fontSize: 18, fontWeight: 700, color: 'var(--azul-beeedu)' }}>
+            {draft.matchScore}%
+          </div>
+          <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>
+            Match
+          </div>
+        </div>
+      </div>
+      {/* Requisitos */}
+      <div style={{ marginBottom: 16 }}>
+        <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--deep-blue)', marginBottom: 8 }}>
+          🛠️ Requisitos:
+        </div>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+          {draft.requisitos.map((req, index) => (
+            <span key={index} style={{
+              padding: '4px 12px',
+              borderRadius: 16,
+              fontSize: 12,
+              background: 'var(--azul-beeedu-light)',
+              color: 'var(--azul-beeedu)',
+              fontWeight: 500
+            }}>
+              {req}
+            </span>
+          ))}
+        </div>
+      </div>
+      {/* Benefícios */}
+      <div style={{ marginBottom: 16 }}>
+        <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--deep-blue)', marginBottom: 8 }}>
+          🎁 Benefícios:
+        </div>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+          {draft.beneficios.map((beneficio, index) => (
+            <span key={index} style={{
+              padding: '4px 12px',
+              borderRadius: 16,
+              fontSize: 12,
+              background: 'var(--cinza-claro)',
+              color: 'var(--text-secondary)',
+              fontWeight: 500
+            }}>
+              {beneficio}
+            </span>
+          ))}
+        </div>
+      </div>
+      {/* Ações */}
+      <div style={{ display: 'flex', gap: 12, justifyContent: 'flex-end' }}>
+        <button style={{
+          padding: '8px 16px',
+          borderRadius: 6,
+          border: '1px solid var(--cinza-card)',
+          background: '#fff',
+          color: 'var(--text-secondary)',
+          fontSize: 14,
+          fontWeight: 500,
+          cursor: 'pointer'
+        }}>
+          Ver Detalhes
+        </button>
+        {draft.status === 'pendente' && (
+          <>
+            <button style={{
+              padding: '8px 16px',
+              borderRadius: 6,
+              border: 'none',
+              background: 'var(--azul-beeedu)',
+              color: '#fff',
+              fontSize: 14,
+              fontWeight: 500,
+              cursor: 'pointer'
+            }}>
+              Aceitar
+            </button>
+            <button style={{
+              padding: '8px 16px',
+              borderRadius: 6,
+              border: '1px solid #F44336',
+              background: '#fff',
+              color: '#F44336',
+              fontSize: 14,
+              fontWeight: 500,
+              cursor: 'pointer'
+            }}>
+              Recusar
+            </button>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default function DraftsReceivedPage() {
   const { user } = useAuth();
   const [filterStatus, setFilterStatus] = useState('todos');
   const [searchTerm, setSearchTerm] = useState('');
 
-  const filteredDrafts = DRAFTS_DATA.filter(draft => {
+  const filteredDrafts = useMemo(() => DRAFTS_DATA.filter(draft => {
     const matchesStatus = filterStatus === 'todos' || draft.status === filterStatus;
     const matchesSearch = draft.empresa.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          draft.cargo.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesStatus && matchesSearch;
-  });
+  }), [filterStatus, searchTerm]);
 
-  const stats = {
+  const stats = useMemo(() => ({
     total: DRAFTS_DATA.length,
     pendentes: DRAFTS_DATA.filter(d => d.status === 'pendente').length,
     aceitos: DRAFTS_DATA.filter(d => d.status === 'aceito').length,
     recusados: DRAFTS_DATA.filter(d => d.status === 'recusado').length
-  };
+  }), []);
 
   return (
     <div className="student-dashboard">
@@ -149,7 +290,7 @@ export default function DraftsReceivedPage() {
           {/* Header da página */}
           <div style={{ marginBottom: 32 }}>
             <h1 style={{ fontSize: 32, fontWeight: 700, color: 'var(--azul-beeedu)', marginBottom: 8 }}>
-              📋 Drafts Recebidos
+              📋 Job Draft
             </h1>
             <p style={{ fontSize: 16, color: 'var(--text-secondary)', marginBottom: 24 }}>
               Vagas personalizadas que empresas enviaram para você baseado no seu perfil
@@ -158,22 +299,10 @@ export default function DraftsReceivedPage() {
 
           {/* Estatísticas */}
           <div style={{ display: 'flex', gap: 16, marginBottom: 32, flexWrap: 'wrap' }}>
-            <div style={{ background: 'var(--azul-beeedu)', borderRadius: 12, padding: 20, flex: 1, minWidth: 150, textAlign: 'center' }}>
-              <div style={{ fontSize: 24, fontWeight: 700, color: '#fff' }}>{stats.total}</div>
-              <div style={{ fontSize: 14, color: '#fff', opacity: 0.9 }}>Total</div>
-            </div>
-            <div style={{ background: 'var(--azul-beeedu)', borderRadius: 12, padding: 20, flex: 1, minWidth: 150, textAlign: 'center' }}>
-              <div style={{ fontSize: 24, fontWeight: 700, color: '#fff' }}>{stats.pendentes}</div>
-              <div style={{ fontSize: 14, color: '#fff', opacity: 0.9 }}>Pendentes</div>
-            </div>
-            <div style={{ background: 'var(--azul-beeedu)', borderRadius: 12, padding: 20, flex: 1, minWidth: 150, textAlign: 'center' }}>
-              <div style={{ fontSize: 24, fontWeight: 700, color: '#fff' }}>{stats.aceitos}</div>
-              <div style={{ fontSize: 14, color: '#fff', opacity: 0.9 }}>Aceitos</div>
-            </div>
-            <div style={{ background: 'var(--azul-beeedu)', borderRadius: 12, padding: 20, flex: 1, minWidth: 150, textAlign: 'center' }}>
-              <div style={{ fontSize: 24, fontWeight: 700, color: '#fff' }}>{stats.recusados}</div>
-              <div style={{ fontSize: 14, color: '#fff', opacity: 0.9 }}>Recusados</div>
-            </div>
+            <StatsCard value={stats.total} label="Total" />
+            <StatsCard value={stats.pendentes} label="Pendentes" />
+            <StatsCard value={stats.aceitos} label="Aceitos" />
+            <StatsCard value={stats.recusados} label="Recusados" />
           </div>
 
           {/* Filtros e Busca */}
@@ -216,136 +345,7 @@ export default function DraftsReceivedPage() {
           {/* Lista de Drafts */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
             {filteredDrafts.map((draft) => (
-              <div key={draft.id} style={{ 
-                background: '#fff', 
-                borderRadius: 12, 
-                padding: 24, 
-                boxShadow: 'var(--shadow-card)',
-                border: '1px solid var(--cinza-card)'
-              }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 16 }}>
-                  <div style={{ flex: 1 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
-                      <h3 style={{ fontSize: 20, fontWeight: 600, color: 'var(--deep-blue)', margin: 0 }}>
-                        {draft.cargo}
-                      </h3>
-                      <span style={{
-                        padding: '4px 12px',
-                        borderRadius: 20,
-                        fontSize: 12,
-                        fontWeight: 600,
-                        color: '#fff',
-                        background: getStatusColor(draft.status)
-                      }}>
-                        {getStatusText(draft.status)}
-                      </span>
-                    </div>
-                    <div style={{ fontSize: 16, fontWeight: 500, color: 'var(--azul-beeedu)', marginBottom: 4 }}>
-                      {draft.empresa}
-                    </div>
-                    <div style={{ fontSize: 14, color: 'var(--text-secondary)', marginBottom: 8 }}>
-                      📍 {draft.localizacao} • 💰 {draft.salario} • 📋 {draft.tipo}
-                    </div>
-                    <div style={{ fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.5 }}>
-                      {draft.descricao}
-                    </div>
-                  </div>
-                  <div style={{ textAlign: 'right', marginLeft: 16 }}>
-                    <div style={{ fontSize: 18, fontWeight: 700, color: 'var(--azul-beeedu)' }}>
-                      {draft.matchScore}%
-                    </div>
-                    <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>
-                      Match
-                    </div>
-                  </div>
-                </div>
-
-                {/* Requisitos */}
-                <div style={{ marginBottom: 16 }}>
-                  <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--deep-blue)', marginBottom: 8 }}>
-                    🛠️ Requisitos:
-                  </div>
-                  <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                    {draft.requisitos.map((req, index) => (
-                      <span key={index} style={{
-                        padding: '4px 12px',
-                        borderRadius: 16,
-                        fontSize: 12,
-                        background: 'var(--azul-beeedu-light)',
-                        color: 'var(--azul-beeedu)',
-                        fontWeight: 500
-                      }}>
-                        {req}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Benefícios */}
-                <div style={{ marginBottom: 16 }}>
-                  <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--deep-blue)', marginBottom: 8 }}>
-                    🎁 Benefícios:
-                  </div>
-                  <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                    {draft.beneficios.map((beneficio, index) => (
-                      <span key={index} style={{
-                        padding: '4px 12px',
-                        borderRadius: 16,
-                        fontSize: 12,
-                        background: 'var(--cinza-claro)',
-                        color: 'var(--text-secondary)',
-                        fontWeight: 500
-                      }}>
-                        {beneficio}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Ações */}
-                <div style={{ display: 'flex', gap: 12, justifyContent: 'flex-end' }}>
-                  <button style={{
-                    padding: '8px 16px',
-                    borderRadius: 6,
-                    border: '1px solid var(--cinza-card)',
-                    background: '#fff',
-                    color: 'var(--text-secondary)',
-                    fontSize: 14,
-                    fontWeight: 500,
-                    cursor: 'pointer'
-                  }}>
-                    Ver Detalhes
-                  </button>
-                  {draft.status === 'pendente' && (
-                    <>
-                      <button style={{
-                        padding: '8px 16px',
-                        borderRadius: 6,
-                        border: 'none',
-                        background: 'var(--azul-beeedu)',
-                        color: '#fff',
-                        fontSize: 14,
-                        fontWeight: 500,
-                        cursor: 'pointer'
-                      }}>
-                        Aceitar
-                      </button>
-                      <button style={{
-                        padding: '8px 16px',
-                        borderRadius: 6,
-                        border: '1px solid #F44336',
-                        background: '#fff',
-                        color: '#F44336',
-                        fontSize: 14,
-                        fontWeight: 500,
-                        cursor: 'pointer'
-                      }}>
-                        Recusar
-                      </button>
-                    </>
-                  )}
-                </div>
-              </div>
+              <DraftCard key={draft.id} draft={draft} />
             ))}
           </div>
 
