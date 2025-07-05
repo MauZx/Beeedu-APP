@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import FormField from './FormField';
 import FormSelect from './FormSelect';
 import FormAutoComplete from './FormAutoComplete';
@@ -200,6 +201,7 @@ const validateBirthDate = (value) => {
 };
 
 function StudentRegistrationForm({ onCancel }) {
+  const navigate = useNavigate();
   // Estados dos campos do formulário
   const [form, setForm] = useState({
     username: '',
@@ -526,7 +528,12 @@ function StudentRegistrationForm({ onCancel }) {
     setTimeout(() => {
       setSubmitting(false);
       setSuccess(true);
-      // Aqui você pode chamar a API real de cadastro
+      // Salvar dados do usuário no localStorage
+      localStorage.setItem('userData', JSON.stringify(form));
+      // Redirecionar para a página de interesses após 2 segundos
+      setTimeout(() => {
+        navigate('/interesses');
+      }, 2000);
     }, 1500);
   };
 
@@ -681,7 +688,7 @@ function StudentRegistrationForm({ onCancel }) {
       )}
       {success && (
         <div style={{ marginTop: 24, color: '#6699FF', fontWeight: 700, fontSize: 18, textAlign: 'center' }}>
-          Cadastro realizado com sucesso!
+          Cadastro realizado com sucesso! Redirecionando para seleção de interesses...
         </div>
       )}
     </form>

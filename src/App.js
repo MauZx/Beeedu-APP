@@ -8,6 +8,7 @@ import UXDesignCoursePage from './components/UXDesignCoursePage';
 import ProgressPage from './components/ProgressPage';
 import DraftsReceivedPage from './components/DraftsReceivedPage';
 import ProjectsInProgressPage from './components/ProjectsInProgressPage';
+import InterestsSelectionPage from './components/InterestsSelectionPage';
 import './App.css';
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
           <Route path="/dashboard" element={<StudentDashboard onLogout={() => setLoggedIn(false)} />} />
           <Route path="/matriculados" element={<EnrolledCourses />} />
           <Route path="/cadastro" element={<StudentRegistrationForm />} />
+          <Route path="/interesses" element={<InterestsSelectionPage />} />
           <Route path="/curso/ux-design" element={<UXDesignCoursePage />} />
           <Route path="/progresso" element={<ProgressPage />} />
           <Route path="/drafts" element={<DraftsReceivedPage />} />

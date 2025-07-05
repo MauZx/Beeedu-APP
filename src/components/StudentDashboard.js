@@ -97,6 +97,7 @@ export default function StudentDashboard() {
                 <button>Cursos</button>
                 <button>Freelas</button>
                 <button>Empresas</button>
+                <Link to="/interesses" style={{ textDecoration: 'none', color: 'inherit', display: 'block', width: '100%', textAlign: 'left', background: 'none', border: 'none', padding: '8px 16px', cursor: 'pointer', fontSize: 'inherit' }}>Interesses</Link>
                 {podeVerJobDraft && <button>Job Draft</button>}
                 <div className="profile-menu-section"> </div>
                 <button onClick={logout}>Sair</button>
@@ -140,6 +141,7 @@ export default function StudentDashboard() {
             <Link to="/matriculados" className="activity-card" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Cursos Matriculados</Link>
             <div className="activity-card">Freelas em Andamento</div>
             <Link to="/projetos" className="activity-card" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Projetos em Andamento</Link>
+            <Link to="/interesses" className="activity-card" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>🎯 Meus Interesses</Link>
           </div>
         </section>
         {/* Recomendações */}

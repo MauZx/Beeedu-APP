@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
 import './Homepage.css';
@@ -121,6 +122,11 @@ function Homepage({ onStudentRegister }) {
                   <div className="auth-divider">
                     <span>ou</span>
                   </div>
+
+                  <Link to="/interesses" className="auth-btn outline" style={{ textDecoration: 'none', display: 'block', marginBottom: 12 }}>
+                    <span className="btn-icon">🎯</span>
+                    Explorar Interesses
+                  </Link>
 
                   <div className="login-options">
                     <button 
