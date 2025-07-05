@@ -99,69 +99,46 @@ export default function ProgressPage() {
           </Link>
         </div>
       </header>
-      {/* Conteúdo principal da barra de progresso */}
-      <main className="dashboard-main" style={{ background: '#f7f9fb', minHeight: '80vh', padding: '32px 0' }}>
-        <div className="min-h-screen py-12 px-4 flex flex-col items-center">
-          <h1 className="text-4xl font-bold mb-2 text-blue-900">Progresso de Nível</h1>
-          <div className="mb-6 text-lg text-blue-700">Level {userProgress.currentLevel} &bull; {userProgress.currentPoints} pontos</div>
-          <div className="w-full max-w-3xl bg-white rounded-xl shadow-lg p-8 flex flex-col items-center">
-            <div className="w-full flex items-center mb-4">
-              <div className="flex-1">
-                <div className="h-6 bg-gray-200 rounded-full relative overflow-hidden">
-                  <div
-                    className="h-6 bg-blue-500 rounded-full transition-all duration-500"
-                    style={{ width: `${progressPercent}%` }}
-                  ></div>
-                  <div className="absolute left-1/2 top-0 -translate-x-1/2 text-xs text-blue-900 font-bold" style={{ top: '-1.5rem' }}>
-                    {progressPercent.toFixed(1)}%
-                  </div>
+      <main className="dashboard-main" style={{ background: '#181A1B', minHeight: '80vh', padding: '32px 0', color: '#fff' }}>
+        <div style={{ maxWidth: 900, margin: '0 auto', padding: 24 }}>
+          {/* Barra de progresso inspirada na imagem */}
+          <div style={{ background: '#232428', borderRadius: 16, padding: 32, boxShadow: '0 2px 24px #0008', marginBottom: 40 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+              <span style={{ fontSize: 36, fontWeight: 700, color: '#FFD700', minWidth: 80, textAlign: 'center' }}>{userProgress.currentLevel}</span>
+              <div style={{ flex: 1, margin: '0 24px', position: 'relative' }}>
+                <div style={{ height: 28, background: '#444', borderRadius: 14, overflow: 'hidden', position: 'relative', boxShadow: '0 0 8px #FFD70088' }}>
+                  <div style={{ height: '100%', width: `${progressPercent}%`, background: 'linear-gradient(90deg, #FFD700 60%, #FFB300 100%)', boxShadow: '0 0 16px #FFD70088', transition: 'width 0.7s cubic-bezier(.4,2,.6,1)' }}></div>
                 </div>
-                <div className="flex justify-between mt-2 text-xs text-gray-500">
-                  <span>Level {userProgress.currentLevel}</span>
-                  <span>Level {userProgress.currentLevel + 1}</span>
+                <div style={{ position: 'absolute', left: `${progressPercent}%`, top: -32, transform: 'translateX(-50%)', color: '#FFD700', fontWeight: 700, fontSize: 18, whiteSpace: 'nowrap' }}>
+                  +{userProgress.currentPoints - pointsForCurrent} XP
                 </div>
               </div>
-              <div className="ml-8 flex flex-col items-center">
-                <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center text-3xl mb-2 border-4 border-yellow-300 shadow">
-                  🏅
-                </div>
-                <div className="text-sm font-semibold text-yellow-700 text-center">{currentBadge.name}</div>
-              </div>
+              <span style={{ fontSize: 36, fontWeight: 700, color: '#FFD700', minWidth: 80, textAlign: 'center' }}>{userProgress.currentLevel + 1}</span>
             </div>
-            <div className="w-full mt-8">
-              <h2 className="text-xl font-bold mb-4 text-blue-800">Insígnias Desbloqueadas</h2>
-              <div className="flex flex-wrap gap-4">
-                {userProgress.unlockedBadges.map((badge, idx) => (
-                  <div key={badge.level} className="flex flex-col items-center">
-                    <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center text-2xl border-2 border-yellow-300 mb-1">🏅</div>
-                    <div className="text-xs text-yellow-800 text-center font-semibold">{badge.name}</div>
-                    <div className="text-[10px] text-gray-400">Nível {badge.level}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="w-full mt-10">
-              <h2 className="text-xl font-bold mb-4 text-blue-800">Próximos Níveis</h2>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {LEVELS.slice(userProgress.currentLevel, userProgress.currentLevel + 8).map(lvl => (
-                  <div key={lvl.level} className="bg-blue-50 rounded-lg p-3 flex flex-col items-center border border-blue-100">
-                    <div className="font-bold text-blue-700">Nível {lvl.level}</div>
-                    <div className="text-xs text-gray-500">{lvl.points} pontos</div>
-                    <div className="mt-2 text-xs text-yellow-700 font-semibold">{getBadgeForLevel(lvl.level).name}</div>
-                  </div>
-                ))}
-              </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 8 }}>
+              <span style={{ color: '#FFD700', fontWeight: 600, fontSize: 18 }}>Rank Atual</span>
+              <span style={{ color: '#FFD700', fontWeight: 600, fontSize: 18 }}>{(pointsForNext - userProgress.currentPoints).toLocaleString()} XP para o próximo nível</span>
             </div>
           </div>
-          <div className="mt-10 max-w-2xl text-center text-gray-600">
-            <h3 className="text-lg font-bold mb-2 text-blue-800">Como ganhar pontos?</h3>
-            <ul className="text-left mx-auto inline-block">
-              <li>• Conclusão de módulo de curso: <span className="font-bold text-blue-700">+25</span></li>
-              <li>• Conclusão de curso com certificado: <span className="font-bold text-blue-700">+150</span></li>
-              <li>• Verificação de conta (e-mail + celular): <span className="font-bold text-blue-700">+200</span></li>
-              <li>• Conclusão de freela: <span className="font-bold text-blue-700">+225</span></li>
-              <li>• Conclusão de projeto: <span className="font-bold text-blue-700">+575</span></li>
-            </ul>
+
+          {/* Detalhes de pontuação e insígnias */}
+          <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap', justifyContent: 'center' }}>
+            <div style={{ background: '#232428', borderRadius: 12, padding: 24, minWidth: 260, flex: 1, boxShadow: '0 2px 12px #0006' }}>
+              <div style={{ color: '#FFD700', fontWeight: 700, fontSize: 28, marginBottom: 8 }}>{userProgress.currentPoints.toLocaleString()}</div>
+              <div style={{ color: '#fff', fontWeight: 500, fontSize: 16 }}>Total de Pontos</div>
+              <div style={{ marginTop: 16, color: '#FFD700', fontWeight: 600, fontSize: 18 }}>Insígnia Atual</div>
+              <div style={{ fontSize: 22, marginTop: 4 }}>{currentBadge.name}</div>
+            </div>
+            <div style={{ background: '#232428', borderRadius: 12, padding: 24, minWidth: 260, flex: 1, boxShadow: '0 2px 12px #0006' }}>
+              <div style={{ color: '#FFD700', fontWeight: 700, fontSize: 22, marginBottom: 8 }}>Como ganhar pontos?</div>
+              <ul style={{ color: '#fff', fontSize: 15, lineHeight: 1.7, margin: 0, padding: 0, listStyle: 'none' }}>
+                <li>• Conclusão de módulo de curso: <span style={{ color: '#FFD700', fontWeight: 700 }}>+25</span></li>
+                <li>• Conclusão de curso com certificado: <span style={{ color: '#FFD700', fontWeight: 700 }}>+150</span></li>
+                <li>• Verificação de conta (e-mail + celular): <span style={{ color: '#FFD700', fontWeight: 700 }}>+200</span></li>
+                <li>• Conclusão de freela: <span style={{ color: '#FFD700', fontWeight: 700 }}>+225</span></li>
+                <li>• Conclusão de projeto: <span style={{ color: '#FFD700', fontWeight: 700 }}>+575</span></li>
+              </ul>
+            </div>
           </div>
         </div>
       </main>
