@@ -35,7 +35,7 @@ const BADGES = [
 
 // Exemplo de progresso do usuário
 const userProgress = {
-  currentLevel: 17,
+  currentLevel: 5,
   currentPoints: 4200,
   unlockedBadges: BADGES.filter(b => b.level <= 17),
 };
@@ -99,44 +99,44 @@ export default function ProgressPage() {
           </Link>
         </div>
       </header>
-      <main className="dashboard-main" style={{ background: '#181A1B', minHeight: '80vh', padding: '32px 0', color: '#fff' }}>
+      <main className="dashboard-main" style={{ background: 'var(--cinza-claro)', minHeight: '80vh', padding: '32px 0', color: 'var(--deep-blue)' }}>
         <div style={{ maxWidth: 900, margin: '0 auto', padding: 24 }}>
           {/* Barra de progresso inspirada na imagem */}
-          <div style={{ background: '#232428', borderRadius: 16, padding: 32, boxShadow: '0 2px 24px #0008', marginBottom: 40 }}>
+          <div style={{ background: 'var(--azul-beeedu)', borderRadius: 16, padding: 32, boxShadow: 'var(--shadow-card)', marginBottom: 40 }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-              <span style={{ fontSize: 36, fontWeight: 700, color: '#FFD700', minWidth: 80, textAlign: 'center' }}>{userProgress.currentLevel}</span>
+              <span style={{ fontSize: 36, fontWeight: 700, color: 'var(--azul-beeedu-light)', minWidth: 80, textAlign: 'center' }}>{userProgress.currentLevel}</span>
               <div style={{ flex: 1, margin: '0 24px', position: 'relative' }}>
-                <div style={{ height: 28, background: '#444', borderRadius: 14, overflow: 'hidden', position: 'relative', boxShadow: '0 0 8px #FFD70088' }}>
-                  <div style={{ height: '100%', width: `${progressPercent}%`, background: 'linear-gradient(90deg, #FFD700 60%, #FFB300 100%)', boxShadow: '0 0 16px #FFD70088', transition: 'width 0.7s cubic-bezier(.4,2,.6,1)' }}></div>
+                <div style={{ height: 28, background: 'var(--cinza-card)', borderRadius: 14, overflow: 'hidden', position: 'relative', boxShadow: '0 0 8px var(--azul-beeedu-light)' }}>
+                  <div style={{ height: '100%', width: `${progressPercent}%`, background: 'linear-gradient(90deg, var(--azul-beeedu-light) 60%, var(--azul-beeedu) 100%)', boxShadow: '0 0 16px var(--azul-beeedu-light)', transition: 'width 0.7s cubic-bezier(.4,2,.6,1)' }}></div>
                 </div>
-                <div style={{ position: 'absolute', left: `${progressPercent}%`, top: -32, transform: 'translateX(-50%)', color: '#FFD700', fontWeight: 700, fontSize: 18, whiteSpace: 'nowrap' }}>
+                <div style={{ position: 'absolute', left: `${progressPercent}%`, top: -32, transform: 'translateX(-50%)', color: 'var(--azul-beeedu-light)', fontWeight: 700, fontSize: 18, whiteSpace: 'nowrap' }}>
                   +{userProgress.currentPoints - pointsForCurrent} XP
                 </div>
               </div>
-              <span style={{ fontSize: 36, fontWeight: 700, color: '#FFD700', minWidth: 80, textAlign: 'center' }}>{userProgress.currentLevel + 1}</span>
+              <span style={{ fontSize: 36, fontWeight: 700, color: 'var(--azul-beeedu-light)', minWidth: 80, textAlign: 'center' }}>{userProgress.currentLevel + 1}</span>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 8 }}>
-              <span style={{ color: '#FFD700', fontWeight: 600, fontSize: 18 }}>Rank Atual</span>
-              <span style={{ color: '#FFD700', fontWeight: 600, fontSize: 18 }}>{(pointsForNext - userProgress.currentPoints).toLocaleString()} XP para o próximo nível</span>
+              <span style={{ color: 'var(--azul-beeedu-light)', fontWeight: 600, fontSize: 18 }}>Rank Atual</span>
+              <span style={{ color: 'var(--azul-beeedu-light)', fontWeight: 600, fontSize: 18 }}>faltam {Math.abs(pointsForNext - userProgress.currentPoints).toLocaleString()} XP para o próximo nível!</span>
             </div>
           </div>
 
           {/* Detalhes de pontuação e insígnias */}
           <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap', justifyContent: 'center' }}>
-            <div style={{ background: '#232428', borderRadius: 12, padding: 24, minWidth: 260, flex: 1, boxShadow: '0 2px 12px #0006' }}>
-              <div style={{ color: '#FFD700', fontWeight: 700, fontSize: 28, marginBottom: 8 }}>{userProgress.currentPoints.toLocaleString()}</div>
+            <div style={{ background: 'var(--azul-beeedu)', borderRadius: 12, padding: 24, minWidth: 260, flex: 1, boxShadow: 'var(--shadow-card)' }}>
+              <div style={{ color: 'var(--azul-beeedu-light)', fontWeight: 700, fontSize: 28, marginBottom: 8 }}>{userProgress.currentPoints.toLocaleString()}</div>
               <div style={{ color: '#fff', fontWeight: 500, fontSize: 16 }}>Total de Pontos</div>
-              <div style={{ marginTop: 16, color: '#FFD700', fontWeight: 600, fontSize: 18 }}>Insígnia Atual</div>
-              <div style={{ fontSize: 22, marginTop: 4 }}>{currentBadge.name}</div>
+              <div style={{ marginTop: 16, color: 'var(--azul-beeedu-light)', fontWeight: 600, fontSize: 18 }}>Insígnia Atual</div>
+              <div style={{ fontSize: 22, marginTop: 4, color: '#fff' }}>{currentBadge.name}</div>
             </div>
-            <div style={{ background: '#232428', borderRadius: 12, padding: 24, minWidth: 260, flex: 1, boxShadow: '0 2px 12px #0006' }}>
-              <div style={{ color: '#FFD700', fontWeight: 700, fontSize: 22, marginBottom: 8 }}>Como ganhar pontos?</div>
+            <div style={{ background: 'var(--azul-beeedu)', borderRadius: 12, padding: 24, minWidth: 260, flex: 1, boxShadow: 'var(--shadow-card)' }}>
+              <div style={{ color: 'var(--azul-beeedu-light)', fontWeight: 700, fontSize: 22, marginBottom: 8 }}>Como ganhar pontos?</div>
               <ul style={{ color: '#fff', fontSize: 15, lineHeight: 1.7, margin: 0, padding: 0, listStyle: 'none' }}>
-                <li>• Conclusão de módulo de curso: <span style={{ color: '#FFD700', fontWeight: 700 }}>+25</span></li>
-                <li>• Conclusão de curso com certificado: <span style={{ color: '#FFD700', fontWeight: 700 }}>+150</span></li>
-                <li>• Verificação de conta (e-mail + celular): <span style={{ color: '#FFD700', fontWeight: 700 }}>+200</span></li>
-                <li>• Conclusão de freela: <span style={{ color: '#FFD700', fontWeight: 700 }}>+225</span></li>
-                <li>• Conclusão de projeto: <span style={{ color: '#FFD700', fontWeight: 700 }}>+575</span></li>
+                <li>• Conclusão de módulo de curso: <span style={{ color: 'var(--azul-beeedu-light)', fontWeight: 700 }}>+25</span></li>
+                <li>• Conclusão de curso com certificado: <span style={{ color: 'var(--azul-beeedu-light)', fontWeight: 700 }}>+150</span></li>
+                <li>• Verificação de conta (e-mail + celular): <span style={{ color: 'var(--azul-beeedu-light)', fontWeight: 700 }}>+200</span></li>
+                <li>• Conclusão de freela: <span style={{ color: 'var(--azul-beeedu-light)', fontWeight: 700 }}>+225</span></li>
+                <li>• Conclusão de projeto: <span style={{ color: 'var(--azul-beeedu-light)', fontWeight: 700 }}>+575</span></li>
               </ul>
             </div>
           </div>
