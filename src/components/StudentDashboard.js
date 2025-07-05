@@ -139,7 +139,7 @@ export default function StudentDashboard() {
             <Link to="/drafts" className="activity-card" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Drafts Recebidos</Link>
             <Link to="/matriculados" className="activity-card" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Cursos Matriculados</Link>
             <div className="activity-card">Freelas em Curso</div>
-            <div className="activity-card">Projetos em Andamento</div>
+            <Link to="/projetos" className="activity-card" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Projetos em Andamento</Link>
           </div>
         </section>
         {/* Recomendações */}

@@ -7,6 +7,7 @@ import EnrolledCourses from './components/EnrolledCourses';
 import UXDesignCoursePage from './components/UXDesignCoursePage';
 import ProgressPage from './components/ProgressPage';
 import DraftsReceivedPage from './components/DraftsReceivedPage';
+import ProjectsInProgressPage from './components/ProjectsInProgressPage';
 import './App.css';
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
           <Route path="/curso/ux-design" element={<UXDesignCoursePage />} />
           <Route path="/progresso" element={<ProgressPage />} />
           <Route path="/drafts" element={<DraftsReceivedPage />} />
+          <Route path="/projetos" element={<ProjectsInProgressPage />} />
         </Routes>
       </Router>
     </div>

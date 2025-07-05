@@ -36,7 +36,7 @@ const BADGES = [
 
 // Exemplo de progresso do usuário
 const userProgress = {
-  currentPoints: 4200, // Valor de teste final
+  currentPoints: 1200, // Valor de teste final
   unlockedBadges: BADGES.filter(b => b.level <= 17),
 };
 
