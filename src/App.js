@@ -9,6 +9,7 @@ import ProgressPage from './components/ProgressPage';
 import DraftsReceivedPage from './components/DraftsReceivedPage';
 import ProjectsInProgressPage from './components/ProjectsInProgressPage';
 import InterestsSelectionPage from './components/InterestsSelectionPage';
+import FreelasInProgressPage from './components/FreelasInProgressPage';
 import './App.css';
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
           <Route path="/progresso" element={<ProgressPage />} />
           <Route path="/drafts" element={<DraftsReceivedPage />} />
           <Route path="/projetos" element={<ProjectsInProgressPage />} />
+          <Route path="/freelas-andamento" element={<FreelasInProgressPage />} />
         </Routes>
         
         {/* Modal de registro */}
