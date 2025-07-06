@@ -54,4 +54,38 @@ input, select, textarea {
   border: 1px solid var(--light-gray);
   padding: 8px 12px;
   outline: none;
+}
+
+/* Animações */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Melhorias para o formulário */
+.form-step {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.progress-step {
+  transition: all 0.3s ease;
+}
+
+.progress-step.active {
+  transform: scale(1.1);
 } 
