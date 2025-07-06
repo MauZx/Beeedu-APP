@@ -1,4 +1,4 @@
-# 🐝 Beeedu Platform
+# 🐝 Beeedu APP
 
 Uma plataforma educacional inovadora que conecta estudantes de escolas públicas ao mercado de trabalho através de cursos, freelas, gamificação e Drafts de Vagas.
 
@@ -242,7 +242,7 @@ Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalh
 
 ## 📞 Contato
 
-- **Email:** contato@beeedu.com
+- **Email:** [beeedu.app@gmail.com](beeedu.app@gmail.com)
 - **Website:** [beeedu.com](https://beeedu.com)
 - **LinkedIn:** [Beeedu Platform](https://linkedin.com/company/beeedu)
 
