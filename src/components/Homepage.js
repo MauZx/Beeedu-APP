@@ -123,11 +123,6 @@ function Homepage({ onStudentRegister }) {
                     <span>ou</span>
                   </div>
 
-                  <Link to="/interesses" className="auth-btn outline" style={{ textDecoration: 'none', display: 'block', marginBottom: 12 }}>
-                    <span className="btn-icon">🎯</span>
-                    Explorar Interesses
-                  </Link>
-
                   <div className="login-options">
                     <button 
                       className="auth-btn outline" 

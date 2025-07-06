@@ -287,6 +287,9 @@ export default function StudentRegistrationForm({ onCancel }) {
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
 
+  const [cepError, setCepError] = useState("");
+  const [loadingCep, setLoadingCep] = useState(false);
+
   // Buscar cidades do IBGE ao mudar o UF de nascimento
   useEffect(() => {
     if (form.stateOfBirth) {
@@ -422,10 +425,34 @@ export default function StudentRegistrationForm({ onCancel }) {
     setTouched((prev) => ({ ...prev, school: true }));
   };
 
-  const handleBlur = (e) => {
-    const { name } = e.target;
+  const handleBlur = async (e) => {
+    const { name, value } = e.target;
     if (requiredValidation.hasOwnProperty(name)) {
       setTouched((prev) => ({ ...prev, [name]: true }));
+    }
+    // Busca automática de endereço pelo CEP
+    if (name === "zip") {
+      const cep = value.replace(/\D/g, "");
+      if (cep.length === 8) {
+        setLoadingCep(true);
+        setCepError("");
+        try {
+          const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+          const data = await response.json();
+          if (data.erro) throw new Error("CEP não encontrado");
+          setForm((prev) => ({
+            ...prev,
+            address: data.logradouro || "",
+            neighborhood: data.bairro || "",
+            city: data.localidade || "",
+            residenceState: data.uf || "",
+          }));
+        } catch (err) {
+          setCepError("CEP não encontrado ou inválido.");
+        } finally {
+          setLoadingCep(false);
+        }
+      }
     }
   };
 
@@ -534,43 +561,56 @@ export default function StudentRegistrationForm({ onCancel }) {
         </p>
         
         {/* Progress Steps */}
-        <div style={{ 
-          display: 'flex', 
-          justifyContent: 'center', 
-          alignItems: 'center', 
-          gap: '16px',
-          marginBottom: '32px'
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: '0',
+          marginBottom: '32px',
+          width: '100%',
+          maxWidth: 420,
+          marginLeft: 'auto',
+          marginRight: 'auto',
         }}>
           {steps.map((step, index) => (
-            <div key={index} style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: '8px' 
-            }}>
+            <React.Fragment key={index}>
               <div style={{
-                width: '40px',
-                height: '40px',
-                borderRadius: '50%',
-                background: currentStep > index + 1 ? '#6699FF' : 
-                          currentStep === index + 1 ? '#6699FF' : '#E5E7EB',
-                color: currentStep > index + 1 ? '#fff' : 
-                       currentStep === index + 1 ? '#fff' : '#9CA3AF',
                 display: 'flex',
+                flexDirection: 'column',
                 alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '16px',
-                fontWeight: 600
+                width: 70,
               }}>
-                {currentStep > index + 1 ? '✓' : step.icon}
+                <div style={{
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '50%',
+                  background: currentStep > index + 1 ? '#6699FF' : 
+                            currentStep === index + 1 ? '#6699FF' : '#E5E7EB',
+                  color: currentStep > index + 1 ? '#fff' : 
+                         currentStep === index + 1 ? '#fff' : '#9CA3AF',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '18px',
+                  fontWeight: 600,
+                  boxShadow: currentStep === index + 1 ? '0 0 0 4px #eaf2ff' : 'none',
+                  transition: 'box-shadow 0.2s',
+                }}>
+                  {currentStep > index + 1 ? '✓' : step.icon}
+                </div>
               </div>
               {index < steps.length - 1 && (
                 <div style={{
-                  width: '40px',
+                  flex: 1,
                   height: '2px',
-                  background: currentStep > index + 1 ? '#6699FF' : '#E5E7EB'
+                  background: currentStep > index + 1 ? '#6699FF' : '#E5E7EB',
+                  margin: '0 0px',
+                  minWidth: 32,
+                  maxWidth: 60,
+                  alignSelf: 'center',
                 }} />
               )}
-            </div>
+            </React.Fragment>
           ))}
         </div>
         
@@ -588,7 +628,13 @@ export default function StudentRegistrationForm({ onCancel }) {
         {/* Step 1: Informações Pessoais */}
         {currentStep === 1 && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+              gap: '16px',
+              width: '100%',
+              boxSizing: 'border-box',
+            }}>
               <FormField 
                 label="Nome" 
                 name="firstName" 
@@ -601,6 +647,7 @@ export default function StudentRegistrationForm({ onCancel }) {
                 touched={touched.firstName} 
                 placeholder="Seu nome" 
                 formSubmitted={formSubmitted} 
+                style={{ maxWidth: '100%', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}
               />
               <FormField 
                 label="Sobrenome" 
@@ -614,6 +661,7 @@ export default function StudentRegistrationForm({ onCancel }) {
                 touched={touched.lastName} 
                 placeholder="Seu sobrenome" 
                 formSubmitted={formSubmitted} 
+                style={{ maxWidth: '100%', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}
               />
             </div>
             
@@ -630,6 +678,7 @@ export default function StudentRegistrationForm({ onCancel }) {
               placeholder="DD/MM/AAAA" 
               type="text" 
               formSubmitted={formSubmitted} 
+              style={{ maxWidth: '100%', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}
             />
             
             {(() => {
@@ -675,6 +724,7 @@ export default function StudentRegistrationForm({ onCancel }) {
               touched={touched.username} 
               placeholder="Escolha um nome de usuário" 
               formSubmitted={formSubmitted} 
+              style={{ maxWidth: '100%', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}
             />
             
             <FormField 
@@ -690,6 +740,7 @@ export default function StudentRegistrationForm({ onCancel }) {
               touched={touched.cpf} 
               placeholder="Digite seu CPF" 
               formSubmitted={formSubmitted} 
+              style={{ maxWidth: '100%', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}
             />
             
             <FormField 
@@ -705,6 +756,7 @@ export default function StudentRegistrationForm({ onCancel }) {
               touched={touched.phone} 
               placeholder="(99) 99999-9999" 
               formSubmitted={formSubmitted} 
+              style={{ maxWidth: '100%', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}
             />
           </div>
         )}
@@ -718,13 +770,14 @@ export default function StudentRegistrationForm({ onCancel }) {
               value={form.zip} 
               onChange={handleChange} 
               onBlur={handleBlur} 
-              error="" 
+              error={cepError} 
               valid={true} 
-              loading={loading.zip} 
+              loading={loadingCep} 
               icon={null} 
               touched={touched.zip} 
               placeholder="00000-000" 
               formSubmitted={formSubmitted} 
+              style={{ maxWidth: '100%', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}
             />
             
             <FormField 
@@ -739,9 +792,16 @@ export default function StudentRegistrationForm({ onCancel }) {
               touched={touched.address} 
               placeholder="Endereço" 
               formSubmitted={formSubmitted} 
+              style={{ maxWidth: '100%', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}
             />
             
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+              gap: '16px',
+              width: '100%',
+              boxSizing: 'border-box',
+            }}>
               <FormField 
                 label="Bairro da Residência" 
                 name="neighborhood" 
@@ -754,6 +814,7 @@ export default function StudentRegistrationForm({ onCancel }) {
                 touched={touched.neighborhood} 
                 placeholder="Bairro" 
                 formSubmitted={formSubmitted} 
+                style={{ maxWidth: '100%', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}
               />
               
               <FormField 
@@ -768,10 +829,17 @@ export default function StudentRegistrationForm({ onCancel }) {
                 touched={touched.houseNumber} 
                 placeholder="Número da casa/apto" 
                 formSubmitted={formSubmitted} 
+                style={{ maxWidth: '100%', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}
               />
             </div>
             
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+              gap: '16px',
+              width: '100%',
+              boxSizing: 'border-box',
+            }}>
               <FormField 
                 label="Cidade da Residência" 
                 name="city" 
@@ -784,6 +852,7 @@ export default function StudentRegistrationForm({ onCancel }) {
                 touched={touched.city} 
                 placeholder="Cidade" 
                 formSubmitted={formSubmitted} 
+                style={{ maxWidth: '100%', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}
               />
               
               <FormSelect 
@@ -798,6 +867,7 @@ export default function StudentRegistrationForm({ onCancel }) {
                 touched={touched.residenceState} 
                 options={STATES} 
                 formSubmitted={formSubmitted} 
+                style={{ maxWidth: '100%', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}
               />
             </div>
           </div>
@@ -806,7 +876,7 @@ export default function StudentRegistrationForm({ onCancel }) {
         {/* Step 4: Informações Sociais */}
         {currentStep === 4 && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', width: '100%' }}>
               <FormSelect 
                 label="UF de nascimento" 
                 name="stateOfBirth" 
@@ -819,8 +889,8 @@ export default function StudentRegistrationForm({ onCancel }) {
                 touched={touched.stateOfBirth} 
                 options={STATES} 
                 formSubmitted={formSubmitted} 
+                style={{ maxWidth: '100%', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}
               />
-              
               <FormSelect 
                 label="Cidade de nascimento" 
                 name="placeOfBirth" 
@@ -835,32 +905,10 @@ export default function StudentRegistrationForm({ onCancel }) {
                 disabled={!form.stateOfBirth || loadingCities} 
                 placeholder={loadingCities ? 'Carregando cidades...' : 'Selecione'} 
                 formSubmitted={formSubmitted} 
+                style={{ maxWidth: '100%', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}
               />
             </div>
-            
-            <FormAutoComplete 
-              label="Escola em que estuda" 
-              name="school" 
-              value={schoolInput} 
-              onChange={handleSchoolChange} 
-              onBlur={handleBlur} 
-              error="" 
-              valid={true} 
-              icon={null} 
-              touched={touched.school} 
-              suggestions={filteredSchools} 
-              showRequestButton={showRequestButton} 
-              onRequestSchool={() => {}} 
-              onSuggestionClick={(escola) => {
-                setSchoolInput(escola);
-                setForm((prev) => ({ ...prev, school: escola }));
-                setFilteredSchools([]);
-                setShowRequestButton(false);
-              }} 
-              formSubmitted={formSubmitted} 
-            />
-            
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', width: '100%' }}>
               <FormSelect 
                 label="Cor" 
                 name="race" 
@@ -873,8 +921,8 @@ export default function StudentRegistrationForm({ onCancel }) {
                 touched={touched.race} 
                 options={RACES} 
                 formSubmitted={formSubmitted} 
+                style={{ maxWidth: '100%', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}
               />
-              
               <FormSelect 
                 label="Sexo ao nascer" 
                 name="sexAtBirth" 
@@ -887,24 +935,24 @@ export default function StudentRegistrationForm({ onCancel }) {
                 touched={touched.sexAtBirth} 
                 options={SEX_AT_BIRTH} 
                 formSubmitted={formSubmitted} 
+                style={{ maxWidth: '100%', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}
               />
             </div>
-            
-            <FormSelect 
-              label="Gênero" 
-              name="gender" 
-              value={form.gender} 
-              onChange={handleChange} 
-              onBlur={handleBlur} 
-              error="" 
-              valid={true} 
-              icon={null} 
-              touched={touched.gender} 
-              options={GENDERS} 
-              formSubmitted={formSubmitted} 
-            />
-            
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', width: '100%' }}>
+              <FormSelect 
+                label="Gênero" 
+                name="gender" 
+                value={form.gender} 
+                onChange={handleChange} 
+                onBlur={handleBlur} 
+                error="" 
+                valid={true} 
+                icon={null} 
+                touched={touched.gender} 
+                options={GENDERS} 
+                formSubmitted={formSubmitted} 
+                style={{ maxWidth: '100%', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}
+              />
               <FormSelect 
                 label="Escolaridade" 
                 name="education" 
@@ -917,8 +965,10 @@ export default function StudentRegistrationForm({ onCancel }) {
                 touched={touched.education} 
                 options={EDUCATION_LEVELS} 
                 formSubmitted={formSubmitted} 
+                style={{ maxWidth: '100%', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}
               />
-              
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', width: '100%' }}>
               <FormSelect 
                 label="Classe Social" 
                 name="socialClass" 
@@ -931,10 +981,8 @@ export default function StudentRegistrationForm({ onCancel }) {
                 touched={touched.socialClass} 
                 options={SOCIAL_CLASSES} 
                 formSubmitted={formSubmitted} 
+                style={{ maxWidth: '100%', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}
               />
-            </div>
-            
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px' }}>
               <FormField 
                 label="PIS (Programa de Integração Social)" 
                 name="pis" 
@@ -947,8 +995,10 @@ export default function StudentRegistrationForm({ onCancel }) {
                 touched={touched.pis} 
                 placeholder="Opcional" 
                 formSubmitted={formSubmitted} 
+                style={{ maxWidth: '100%', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}
               />
-              
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', width: '100%' }}>
               <FormField 
                 label="Título de Eleitor" 
                 name="tituloEleitor" 
@@ -961,8 +1011,8 @@ export default function StudentRegistrationForm({ onCancel }) {
                 touched={touched.tituloEleitor} 
                 placeholder="Opcional" 
                 formSubmitted={formSubmitted} 
+                style={{ maxWidth: '100%', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}
               />
-              
               <FormField 
                 label="Certificado de Reservista" 
                 name="certificadoReservista" 
@@ -975,22 +1025,9 @@ export default function StudentRegistrationForm({ onCancel }) {
                 touched={touched.certificadoReservista} 
                 placeholder="Opcional" 
                 formSubmitted={formSubmitted} 
+                style={{ maxWidth: '100%', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}
               />
             </div>
-            
-            <FormSelect 
-              label="Interesse" 
-              name="interest" 
-              value={form.interest} 
-              onChange={handleChange} 
-              onBlur={handleBlur} 
-              error="" 
-              valid={true} 
-              icon={null} 
-              touched={touched.interest} 
-              options={INTERESTS} 
-              formSubmitted={formSubmitted} 
-            />
           </div>
         )}
 
@@ -1010,6 +1047,7 @@ export default function StudentRegistrationForm({ onCancel }) {
               touched={touched.email} 
               placeholder="Seu e-mail" 
               formSubmitted={formSubmitted} 
+              style={{ maxWidth: '100%', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}
             />
             
             <FormField 
@@ -1024,6 +1062,7 @@ export default function StudentRegistrationForm({ onCancel }) {
               touched={touched.repeatEmail} 
               placeholder="Repita o e-mail" 
               formSubmitted={formSubmitted} 
+              style={{ maxWidth: '100%', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}
             />
             
             <FormField 
@@ -1038,6 +1077,7 @@ export default function StudentRegistrationForm({ onCancel }) {
               touched={touched.recoveryEmail} 
               placeholder="E-mail alternativo (opcional)" 
               formSubmitted={formSubmitted} 
+              style={{ maxWidth: '100%', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}
             />
             
             <FormField 
@@ -1054,6 +1094,7 @@ export default function StudentRegistrationForm({ onCancel }) {
               placeholder="Mínimo 8 caracteres, conter letras, números e caracteres especiais" 
               formSubmitted={formSubmitted} 
               type="password" 
+              style={{ maxWidth: '100%', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}
             />
             
             <FormField 
@@ -1069,6 +1110,7 @@ export default function StudentRegistrationForm({ onCancel }) {
               placeholder="Repita a senha" 
               formSubmitted={formSubmitted} 
               type="password" 
+              style={{ maxWidth: '100%', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}
             />
           </div>
         )}
